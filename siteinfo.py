@@ -1,7 +1,7 @@
 '''
-This is extract the SITE links for information purpose; which was developed both request_HTML and BS4; However, both works extremly one after another.
+This is extract the SITE links for information purpose; which was developed both request_HTML and BS4; However, both works extremely one after another.
 it will be educational purpose and to know about site work flow and may  find more data further...
-currentnly, integrated and  excuted  either requestsHTML or BS4; when requestsHTML faild to retrive link then BS4 will take a call ;)
+currently, integrated and  executed  either requestsHTML or BS4; when requestsHTML failed to retrieve link then BS4 will take a call ;)
 still in my mind supports requestHTML
 
 '''
