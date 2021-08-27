@@ -1,0 +1,130 @@
+
+'''
+This code developed for the movies download file finding from MoviesDa group. 
+This is specifcally for TAMIL DUBBED movies collction portal used for code improvement.
+Same will do for Telegra BOT from SEP month onwards..
+
+'''
+
+from requests_html import HTMLSession
+from re import search
+import pandas as pd   
+
+# !--   PAGE CHECK FOR THE INDEX
+
+def pagecheck(checkl):
+    x=se.get(checkl)
+    if x.url not in pagex:
+        pagex.append(x.url)
+    if x.html.find('div.isaiminida'):
+        xplink= (''.join(x.html.find('a.pagination_next',first=True).absolute_links))
+        if xplink not in pagex:
+                pagex.append(xplink)
+        if x.html.find('a.pagination_next'):
+           return pagecheckx(xplink)
+    else:
+        print (x.url,'\t No Page an existing...')
+
+def pagecheckx(xplink):
+    x=se.get(xplink)
+    if x.html.find('a.pagination_next'):
+        pagecheck(x.url)
+    return main
+
+#       PAGE CHECK INDEX CODE END --!
+
+def urlLinks(xurl): # main FUNCTION for entire site info extract
+    for a in xurl:
+        ax=se.get(a)
+        if ax.html.find('div [rel="nofollow"]'):
+            for m in ax.html.find('div [rel="nofollow"]'):
+                # print('follow',m.absolute_links)
+                if (''.join(m.absolute_links)) not in moviedelink:
+                    moviedelink.append(''.join(m.absolute_links))
+        else:
+            for m in ax.html.find('div[class="f"]'):
+                # print('nofollow',m.absolute_links)
+                if (''.join(m.absolute_links)) not in moviedelink:
+                    moviedelink.append(''.join(m.absolute_links))
+    return main
+
+def main(): #Getting base URL verifications and then run other functions...
+    [pagecheck(xu) for xu in xurl]
+    urlLinks (pagex)
+    
+def moviesFind(): # Movies link find
+    moviedelinkx.clear(); moviedelinkx.extend(moviedelink)
+    print('Movies link(s) Find based on resolution or part or other',len(moviedelinkx))
+    moviedelink.clear(); urlLinks (moviedelinkx)
+
+def moviesDetails(): # Movies link details find
+    moviedelinkx.clear(); moviedelinkx.extend(moviedelink)
+    print('Movies links Details - Various Resolutions, sample files etc:',len(moviedelinkx))
+    moviedelink.clear(); urlLinks(moviedelinkx)
+
+def moviesDownloadDetailLinks(): #Movies Download links RAW data
+    print('Movies download link details page .. RAW [unFiltred]',len(moviedelink))
+    for x in moviedelink:
+        if search("mp4",''.join(x)):
+            done.append(''.join(x))
+        elif search("php?",''.join(x)):
+            xinvalid.append(''.join(x))
+        elif  search(".html",''.join(x)):
+                rechk.append(''.join(x))
+        else:
+                dchkf.append(''.join(x))
+    print('Direct download links:',len(done),'\t Excluded Links:',len(xinvalid),'\t Links to be processing..',len(dchkf),'\nRecheck/found base link',len(rechk),rechk)
+    moviedelink.clear();moviedelinkx.clear(); 
+ 
+def moviesLinkRaw(): #Movies links raw and will be detailed from same...
+    urlLinks(dchkf);moviedelinkx.extend(moviedelink)
+    moviedelink.clear()
+    urlLinks(moviedelinkx)
+
+def moviesLinks():
+    moviedelinkx.extend(moviedelink)
+    for x in moviedelinkx:
+        if search("mp4",''.join(x)):
+            done.append(''.join(x))
+    
+    print ('Movies Link and Name: ',len(done),done)
+
+def createFile():
+    print ('Will update ')
+    # for mxlist in done:
+    #     ml = mxlist.split('/'); 
+    #     mlist.append(mxlist)
+    #     if (len(ml) == 9):
+    #         mname = (ml[8])
+    #     else:
+    #         mname = (ml[7])
+    #     mlist.append(mname)
+    
+
+if __name__ == '__main__':
+
+    se = HTMLSession() # Session
+    #:: Movies index
+    x = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    xa = ['z']
+
+    #:: List information: 
+    pagex = [] # page link extracting and stored as List
+    xurl = [] # Url list generated based on given an Index;
+    moviedelink = []; moviedelinkx = [] # main function list -- will clear for each functions
+    done = []; xvaild = []; xinvalid = [];dchkf = [];rechk = [] # filer from RAW data. Will be removed some of lists.
+    mlist = [] # movies list
+  
+    #::  Common codes for the Base URL creation and stored as List.
+    for urlgen in xa:
+        url = f'https://isaidubb.co/tamil-atoz-dubbed-movies/{urlgen}'
+        xurl.append(url)
+
+    main()
+    moviesFind()
+    moviesDetails()
+    moviesDownloadDetailLinks()
+    moviesLinkRaw()
+    moviesLinks()
+    createFile()
+
